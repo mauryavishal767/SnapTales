@@ -1,8 +1,9 @@
 import { useAuth } from '../../context/AuthContext';
-import { Button } from '../ui/Button';
+import { useNavigate } from 'react-router-dom';
 
-const Header = ({ onNavigate, onAddMemory }) => {
+const Header = () => {
     const { user, logout } = useAuth();
+    const navigate = useNavigate();
 
     return (
         <header className="bg-white/80 backdrop-blur-md border-b border-white/20 sticky top-0 z-40">
@@ -11,7 +12,7 @@ const Header = ({ onNavigate, onAddMemory }) => {
                     {/* Logo */}
                     <div className="flex items-center">
                         <button 
-                            onClick={() => onNavigate('timeline')}
+                            onClick={() => navigate('/timeline')}
                             className="text-2xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent"
                         >
                             SnapTales
@@ -21,13 +22,13 @@ const Header = ({ onNavigate, onAddMemory }) => {
                     {/* Navigation */}
                     <nav className="hidden md:flex items-center space-x-8">
                         <button
-                            onClick={() => onNavigate('timeline')}
+                            onClick={() => navigate('/timeline')}
                             className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
                         >
                             Timeline
                         </button>
                         <button
-                            onClick={() => onNavigate('profile')}
+                            onClick={() => navigate('/profile')}
                             className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
                         >
                             Profile
@@ -41,7 +42,7 @@ const Header = ({ onNavigate, onAddMemory }) => {
                             <div className="flex items-center space-x-3">
                                 <span 
                                     className="text-sm text-gray-700 hover:cursor-pointer hover:text-primary-600"
-                                    onClick={()=> onNavigate('profile')}
+                                    onClick={()=> navigate('/profile')}
                                 >Hi, {user?.name}</span>
                                 <button
                                     onClick={logout}

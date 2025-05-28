@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { signInUser, getCurrentUser } from '../lib/appwrite';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 
-const LoginPage = ({ onNavigate }) => {
+const LoginPage = () => {
+    const navigate = useNavigate();
     const [form, setForm] = useState({ email: '', password: '' });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -28,7 +30,7 @@ const LoginPage = ({ onNavigate }) => {
                     setUser(user);
                     setIsAuthenticated(true);
                     console.log('user', user);
-                    onNavigate('timeline');
+                    navigate('/timeline');
                 }
 
                 
@@ -92,7 +94,7 @@ const LoginPage = ({ onNavigate }) => {
                         <button
                             onClick={() => {
                                 window.location.hash = 'signup';
-                                onNavigate('signup');
+                                navigate('/signup');
                             }}
                             className="text-primary-600 hover:text-primary-700 font-medium"
                         >

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { account } from '../lib/appwrite';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-function VerificationPage({onNavigate}) {
+function VerificationPage() {
   const [status, setStatus] = useState('pending'); // 'pending', 'success', 'error'
   const [message, setMessage] = useState('');
   // If using react-router, otherwise remove useNavigate
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Parse query params for userId and secret
@@ -32,7 +32,7 @@ function VerificationPage({onNavigate}) {
             setMessage('Your email has been verified! You can now log in.');
             // Optionally redirect after a delay
             alert("verified");
-            setTimeout(() => onNavigate(''), 2000);
+            setTimeout(() => navigate('/login'), 2000);
         }
         catch (err){
           setStatus('error');

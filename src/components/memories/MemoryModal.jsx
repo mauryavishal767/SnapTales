@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { getFilePreview } from '../../lib/appwrite';
 import { Modal } from '../ui/Modal';
 
 const MemoryModal = ({ memory, onClose }) => {

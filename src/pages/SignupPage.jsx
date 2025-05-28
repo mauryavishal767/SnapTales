@@ -1,11 +1,12 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { createUserAccount, createUserDocument, deleteSession } from '../lib/appwrite';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
-import { se } from 'date-fns/locale';
 
-const SignupPage = ({ onNavigate }) => {
+const SignupPage = () => {
+    const navigate = useNavigate();
     const [form, setForm] = useState({
         name: '',
         email: '',
@@ -39,14 +40,6 @@ const SignupPage = ({ onNavigate }) => {
             const newUser = await createUserAccount(form.email, form.password, form.name);
             console.log("user created from signup.jsx", newUser);
             if (newUser) {
-                //TODO
-                // const userDocs = await createUserDocument(newUser.$id, newUser.email, newUser.name);
-                // // const userDocs = "docs"
-                // console.log("user docs created from signup.jsx", userDocs);
-                // setUser(newUser);
-                // setIsAuthenticated(true);
-                // window.location.hash = 'timeline';
-                // onNavigate('login');
                 setSuccess('verification email has been sent.');
             }
         } catch (error) {
@@ -131,8 +124,7 @@ const SignupPage = ({ onNavigate }) => {
                         Already have an account?{' '}
                         <button
                             onClick={() => {
-                                window.location.hash = 'login';
-                                onNavigate('login');
+                                navigate('/login');
                             }}
                             className="text-primary-600 hover:text-primary-700 font-medium"
                         >

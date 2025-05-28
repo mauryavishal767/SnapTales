@@ -40,6 +40,8 @@ export const createUserAccount = async (email, password, name) => {
     try {
         const newAccount = await account.create(ID.unique(), email, password, name);
         const session = await account.createEmailPasswordSession(email, password);
+        // const link = await account.createVerification('http://localhost:5173/verify')
+        // TODO
         const link = await account.createVerification('https://snaptales-theta.vercel.app/verify')
         return newAccount;
     } catch (error) {

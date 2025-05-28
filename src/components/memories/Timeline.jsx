@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { getMemories } from '../../lib/appwrite';
 import MemoryCard from './MemoryCard';
 import MemoryModal from './MemoryModal';
 import  LoadingSpinner  from '../ui/LoadingSpinner';

@@ -1,4 +1,3 @@
-import { getFilePreview } from '../../lib/appwrite';
 
 const MemoryCard = ({ memory, onClick }) => {
     const formatDate = (dateString) => {

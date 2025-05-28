@@ -1,13 +1,14 @@
 // src/pages/ProfilePage.js
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { updateUserDocument, uploadFile, deleteFile, getCurrentUser, databases, getUserDocument, createUserDocument } from '../lib/appwrite';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { User, Heart, Calendar, MapPin, ArrowLeft, Camera, Edit3, Save, X, Plus, Trash2 } from 'lucide-react';
-import { data } from 'autoprefixer';
 
-const ProfilePage = ({ onNavigate }) => {
+const ProfilePage = () => {
+    const navigate = useNavigate();
     const { user, setUser } = useAuth();
     const [loading, setLoading] = useState(false);
     const [editing, setEditing] = useState(false);
@@ -192,7 +193,7 @@ const ProfilePage = ({ onNavigate }) => {
                         <h1 className="text-3xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
                             <button
                                 type="button"
-                                onClick={()=>{onNavigate('timeline')}}
+                                onClick={()=>{navi('timeline')}}
                                 className="inline-flex items-center text-primary-600 hover:text-primary-800 font-medium mr-3"
                                 aria-label="Back"
                             >
@@ -301,7 +302,7 @@ const ProfilePage = ({ onNavigate }) => {
                             )}
 
                             <div className="mb-4"
-                                onClick={() => onNavigate('connection')}
+                                onClick={() => navigate('/connection')}
                             >
                                 <a
                                     href="#connection"
@@ -409,7 +410,7 @@ const ProfilePage = ({ onNavigate }) => {
                             
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <Button
-                                    onClick={() => onNavigate('timeline')}
+                                    onClick={() => navigate('/timeline')}
                                     variant="outline"
                                     className="flex items-center gap-2"
                                 >
@@ -418,7 +419,8 @@ const ProfilePage = ({ onNavigate }) => {
                                 </Button>
                                 
                                 <Button
-                                    onClick={() => onNavigate('add-memory')}
+                                    // TODO: add addmemory 
+                                    onClick={() => {}}
                                     variant="outline"
                                     className="flex items-center gap-2"
                                 >
