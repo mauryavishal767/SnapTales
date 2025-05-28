@@ -53,6 +53,7 @@ const Router = () => {
         const currentPath = window.location.pathname;
         if(currentPath === '/verify'){
             console.log("verify")
+            setCurrentPage('verify')
             return <VerificationPage onNavigate={setCurrentPage}/>;
         }
         if (currentPage === 'signup' || currentPath === '/signup') {
