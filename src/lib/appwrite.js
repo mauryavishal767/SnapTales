@@ -20,17 +20,6 @@ const MEMORIES_COLLECTION_ID = import.meta.env.VITE_APPWRITE_MEMORIES_COLLECTION
 const USERS_COLLECTION_ID    = import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID;
 const STORAGE_BUCKET_ID      = import.meta.env.VITE_APPWRITE_STORAGE_BUCKET_ID;
 
-// delete session with id
-export const deleteSession = async (sessionID) => {
-    try {
-        // TODO: see if i acn use signout code
-        const result = await account.deleteSession(sessionID);
-        return result;
-    } catch (error) {
-        throw error
-    }
-}
-
 // Authentication functions
 export const createUserAccount = async (email, password, name) => {
     try {

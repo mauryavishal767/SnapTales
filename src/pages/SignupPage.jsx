@@ -1,9 +1,8 @@
-import { useState }          from 'react';
-import { useNavigate }       from 'react-router-dom';
-import { createUserAccount } from '../lib/appwrite';
-import { useAuth }           from '../context/AuthContext';
-import { Button }            from '../components/ui/Button';
-import { Input }             from '../components/ui/Input';
+import { useState }                       from 'react';
+import { useNavigate }                    from 'react-router-dom';
+import { Button }                         from '../components/ui/Button';
+import { Input }                          from '../components/ui/Input';
+import { createUserAccount, signOutUser } from '../lib/appwrite';
 
 const SignupPage = () => {
     const navigate              = useNavigate();
@@ -36,15 +35,18 @@ const SignupPage = () => {
         }
 
         try {
-            const {newAccount, session, link} = await createUserAccount(form.email, form.password, form.name);
+            const {newAccount} = await createUserAccount(form.email, form.password, form.name);
             if (newAccount) {
                 setSuccess('verification email has been sent.');
-                setTimeout(() => {
-                    // TODO: delete session
-                }, 3000);
             }
         } catch (error) {
             setError(error.message || 'Sign up failed. Please try again.');
+        }
+
+        try {
+            const sessionOut = await signOutUser();
+        } catch (error) {
+            setError(error.message || 'Session Not ended, befor everification refresh the page, and logout');
         } finally {
             setLoading(false);
         }
