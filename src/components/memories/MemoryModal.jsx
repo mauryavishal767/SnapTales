@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Modal } from '../ui/Modal';
+import { Modal }    from '../ui/Modal';
 
 const MemoryModal = ({ memory, onClose }) => {
     if(!memory) return null;
@@ -8,19 +8,19 @@ const MemoryModal = ({ memory, onClose }) => {
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleDateString('en-US', {
             weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
+            year   : 'numeric',
+            month  : 'long',
+            day    : 'numeric'
         });
     };
 
     const formatTime = (dateString) => {
         return new Date(dateString).toLocaleTimeString('en-US', {
-            hour: '2-digit',
+            hour  : '2-digit',
             minute: '2-digit'
         });
     };
-
+    // TODO: when opening memory images are not showing in preview or maybe its just loading very slow, and if some photos are not geting uploaded give option to add option for user to edit the memory 
     // Get all images (cover + additional)
     const allImages = [];
     if (memory.coverImage) {

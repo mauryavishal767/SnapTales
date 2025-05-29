@@ -1,22 +1,21 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { createUserAccount, createUserDocument, deleteSession } from '../lib/appwrite';
-import { useAuth } from '../context/AuthContext';
-import { Button } from '../components/ui/Button';
-import { Input } from '../components/ui/Input';
+import { useState }          from 'react';
+import { useNavigate }       from 'react-router-dom';
+import { createUserAccount } from '../lib/appwrite';
+import { useAuth }           from '../context/AuthContext';
+import { Button }            from '../components/ui/Button';
+import { Input }             from '../components/ui/Input';
 
 const SignupPage = () => {
-    const navigate = useNavigate();
-    const [form, setForm] = useState({
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
-    });
+    const navigate              = useNavigate();
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState('');
-    const [error, setError] = useState('');
-    const { setUser, setIsAuthenticated } = useAuth();
+    const [error  , setError]   = useState('');
+    const [form   , setForm]    = useState({
+        name           : '',
+        email          : '',
+        password       : '',
+        confirmPassword: ''
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -37,13 +36,14 @@ const SignupPage = () => {
         }
 
         try {
-            const newUser = await createUserAccount(form.email, form.password, form.name);
-            console.log("user created from signup.jsx", newUser);
-            if (newUser) {
+            const {newAccount, session, link} = await createUserAccount(form.email, form.password, form.name);
+            if (newAccount) {
                 setSuccess('verification email has been sent.');
+                setTimeout(() => {
+                    // TODO: delete session
+                }, 3000);
             }
         } catch (error) {
-            console.log("error at signup", error);
             setError(error.message || 'Sign up failed. Please try again.');
         } finally {
             setLoading(false);

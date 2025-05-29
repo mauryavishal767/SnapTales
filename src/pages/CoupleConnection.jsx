@@ -1,18 +1,17 @@
 // src/components/profile/CoupleConnection.jsx
-import React, { useState } from 'react';
-import { Input } from '../components/ui/Input';
-import { Button } from '../components/ui/Button';
-import { useAuth } from '../context/AuthContext';
+import React, { useState }    from 'react';
+import { Input }              from '../components/ui/Input';
+import { Button }             from '../components/ui/Button';
+import { useAuth }            from '../context/AuthContext';
 import { connectWithPartner } from '../lib/coupleService';
 
 const CoupleConnection = () => {
-    const { user } = useAuth();
-
-    const [partnerUserId, setPartnerUserId] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
-    const [coupleInfo, setCoupleInfo] = useState(null);
+    const {user}                                     = useAuth();
+    const [partnerUserId , setPartnerUserId]         = useState('');
+    const [loading       , setLoading]               = useState(false);
+    const [error         , setError]                 = useState('');
+    const [success       , setSuccess]               = useState('');
+    const [coupleInfo    , setCoupleInfo]            = useState(null);
 
     const handleConnect = async () => {
         setError('');

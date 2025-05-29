@@ -2,8 +2,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
+    const navigate         = useNavigate();
     const { user, logout } = useAuth();
-    const navigate = useNavigate();
 
     return (
         <header className="bg-white/80 backdrop-blur-md border-b border-white/20 sticky top-0 z-40">

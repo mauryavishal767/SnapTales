@@ -6,44 +6,39 @@ const client = new Client();
 
 client
     .setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT) // Your Appwrite Endpoint
-    .setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID); // Your project ID from Appwrite console
+    .setProject (import.meta.env.VITE_APPWRITE_PROJECT_ID); // Your project ID from Appwrite console
     
 
-export const account = new Account(client);
+export const account   = new Account(client);
 export const databases = new Databases(client);
-export const storage = new Storage(client);
+export const storage   = new Storage(client);
 
 // Database and Collection IDs (you'll create these in Appwrite console)
-const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
-const COUPLES_COLLECTION_ID = import.meta.env.VITE_APPWRITE_COUPLES_COLLECTION_ID;
+const DATABASE_ID            = import.meta.env.VITE_APPWRITE_DATABASE_ID;
+const COUPLES_COLLECTION_ID  = import.meta.env.VITE_APPWRITE_COUPLES_COLLECTION_ID;
 const MEMORIES_COLLECTION_ID = import.meta.env.VITE_APPWRITE_MEMORIES_COLLECTION_ID;
-const USERS_COLLECTION_ID = import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID;
-const STORAGE_BUCKET_ID = import.meta.env.VITE_APPWRITE_STORAGE_BUCKET_ID;
+const USERS_COLLECTION_ID    = import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID;
+const STORAGE_BUCKET_ID      = import.meta.env.VITE_APPWRITE_STORAGE_BUCKET_ID;
 
-// Helper functions
-export const appwriteConfig = {
-    databaseId: DATABASE_ID,
-    couplesCollectionId: COUPLES_COLLECTION_ID,
-    memoriesCollectionId: MEMORIES_COLLECTION_ID,
-    usersCollectionId: USERS_COLLECTION_ID,
-    storageId: STORAGE_BUCKET_ID,
-};
-
+// delete session with id
 export const deleteSession = async (sessionID) => {
-    const result = await account.deleteSession(sessionID);
-    return result;
+    try {
+        // TODO: see if i acn use signout code
+        const result = await account.deleteSession(sessionID);
+        return result;
+    } catch (error) {
+        throw error
+    }
 }
-
 
 // Authentication functions
 export const createUserAccount = async (email, password, name) => {
     try {
         const newAccount = await account.create(ID.unique(), email, password, name);
-        const session = await account.createEmailPasswordSession(email, password);
-        // const link = await account.createVerification('http://localhost:5173/verify')
-        // TODO
-        const link = await account.createVerification('https://snaptales-theta.vercel.app/verify')
-        return newAccount;
+        const session    = await account.createEmailPasswordSession(email, password);
+        const link       = await account.createVerification('https://snaptales-theta.vercel.app/verify')
+        
+        return {newAccount, session, link};
     } catch (error) {
         throw error;
     }
@@ -84,18 +79,19 @@ export const createUserDocument = async (userId, email, name) => {
             USERS_COLLECTION_ID,
             userId,
             {
-                userId: userId,
-                email: email,
-                name: name,
-                coupleId: '',
-                partnerId: '',
-                bio: '',
-                partnerName: '',
+                userId           : userId,
+                email            : email,
+                name             : name,
+                coupleId         : '',
+                partnerId        : '',
+                bio              : '',
+                partnerName      : '',
                 relationshipStart: '',
-                location: '',
-                anniversary: '',
-                avatarUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(name || 'User')}&background=random`,
-                avatarId: '',
+                location         : '',
+                anniversary      : '',
+                // TODO: do this default url in component don't push it on db
+                avatarUrl        : `https://ui-avatars.com/api/?name=${encodeURIComponent(name || 'User')}&background=random`,
+                avatarId         : '',
             },
             [
                 Permission.read(Role.user(userId)),
@@ -124,8 +120,8 @@ export const getUserDocument = async (userId) => {
     }
 };
 
-
 export const updateUserDocument = async (userId, data) => {
+    //TODO: check the code can be optimised also i have used try inside catch fix it
     try {
         // First, try to get the existing document
         const existingDoc = await databases.getDocument(
@@ -152,8 +148,8 @@ export const updateUserDocument = async (userId, data) => {
                     userId,
                     {
                         userId: userId,
-                        email: currentUser.email,
-                        name: currentUser.name,
+                        email : currentUser.email,
+                        name  : currentUser.name,
                         ...data
                     }
                 );
@@ -177,7 +173,7 @@ export const createCouple = async (user1Id, user2Email, coupleName) => {
                 user1Id,
                 user2Email,
                 coupleName,
-                status: 'pending', // pending, active
+                status: 'active', // pending, active
                 createdAt: new Date().toISOString(),
             }
         );
@@ -245,8 +241,8 @@ export const getFilePreview = (fileId) => {
 
 export const deleteFile = async (fileId) => {
     try {
-        await storage.deleteFile(STORAGE_BUCKET_ID, fileId);
-        return { status: 'ok' };
+        const res = await storage.deleteFile(STORAGE_BUCKET_ID, fileId);
+        return { status: 'ok' , res};
     } catch (error) {
         throw error;
     }

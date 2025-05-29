@@ -1,22 +1,21 @@
 // src/pages/ProfilePage.js
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { updateUserDocument, uploadFile, deleteFile, getCurrentUser, databases, getUserDocument, createUserDocument } from '../lib/appwrite';
-import { Button } from '../components/ui/Button';
-import { Input } from '../components/ui/Input';
-import { User, Heart, Calendar, MapPin, ArrowLeft, Camera, Edit3, Save, X, Plus, Trash2 } from 'lucide-react';
+import { useNavigate }         from 'react-router-dom';
+import { useAuth }             from '../context/AuthContext';
+import { Button }              from '../components/ui/Button';
+import { Input }               from '../components/ui/Input';
+import { User, Heart, Calendar, ArrowLeft, Camera, Edit3, Save, X, Plus } from 'lucide-react';
+import { updateUserDocument, uploadFile, deleteFile, getCurrentUser, getUserDocument, createUserDocument } from '../lib/appwrite';
 
 const ProfilePage = () => {
-    const navigate = useNavigate();
-    const { user, setUser } = useAuth();
-    const [loading, setLoading] = useState(false);
-    const [editing, setEditing] = useState(false);
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
+    const navigate                              = useNavigate();
+    const { user          , setUser }           = useAuth();
+    const [loading        , setLoading]         = useState(false);
+    const [editing        , setEditing]         = useState(false);
+    const [error          , setError]           = useState('');
+    const [success        , setSuccess]         = useState('');
     const [uploadingAvatar, setUploadingAvatar] = useState(false);
-    
-    const [profile, setProfile] = useState({
+    const [profile        , setProfile]         = useState({
         name: '',
         email: '',
         bio: '',
@@ -59,25 +58,23 @@ const ProfilePage = () => {
         }));
     };
 
+    // TODO: dekhna esa hai bhi ki nhi ya mere browser me problem thi,
+    // loook into avatar, after geting new upload it sets to previous avatr before saving the data
     const handleAvatarUpload = async (event) => {
-        console.log('handleAvatarUpload')
         const file = event.target.files[0];
         if (!file) return;
-        console.log('file seleted')
 
         // Validate file size (max 5MB)
         if (file.size > 5 * 1024 * 1024) {
             setError('Image size should be less than 5MB');
             return;
         }
-        console.log('file size less than 5mb')
 
         // Validate file type
         if (!file.type.startsWith('image/')) {
             setError('Please select a valid image file');
             return;
         }
-        console.log('file is image')
 
         setUploadingAvatar(true);
         setError('');
@@ -93,9 +90,6 @@ const ProfilePage = () => {
             const uploadedFile = await uploadFile(file);
             const avatarUrl = `${import.meta.env.VITE_APPWRITE_ENDPOINT}/storage/buckets/${import.meta.env.VITE_APPWRITE_STORAGE_BUCKET_ID}/files/${uploadedFile.$id}/view?project=${import.meta.env.VITE_APPWRITE_PROJECT_ID}`;
             
-            console.log("uploaede file", uploadedFile)
-            console.log("uploaede new pic", avatarUrl)
-
             setProfile(prev => ({
                 ...prev,
                 avatarUrl: avatarUrl,
@@ -148,15 +142,15 @@ const ProfilePage = () => {
         // Reset to original values
         if (user) {
             setProfile({
-                name: user.name || '',
-                email: user.email || '',
-                bio: user.bio || '',
-                partnerName: user.partnerName || '',
+                name             : user.name              || '',
+                email            : user.email             || '',
+                bio              : user.bio               || '',
+                partnerName      : user.partnerName       || '',
                 relationshipStart: user.relationshipStart || '',
-                location: user.location || '',
-                anniversary: user.anniversary || '',
-                avatarUrl: user.avatarUrl || '',
-                avatarId: user.avatarId || ''
+                location         : user.location          || '',
+                anniversary      : user.anniversary       || '',
+                avatarUrl        : user.avatarUrl         || '',
+                avatarId         : user.avatarId          || ''
             });
         }
         setEditing(false);
@@ -168,16 +162,16 @@ const ProfilePage = () => {
         if (!profile.relationshipStart) return '';
         
         const startDate = new Date(profile.relationshipStart);
-        const today = new Date();
-        const diffTime = Math.abs(today - startDate);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        const today     = new Date();
+        const diffTime  = Math.abs(today - startDate);
+        const diffDays  = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         
-        const years = Math.floor(diffDays / 365);
+        const years  = Math.floor(diffDays / 365);
         const months = Math.floor((diffDays % 365) / 30);
-        const days = diffDays % 30;
+        const days   = diffDays % 30;
         
         let duration = '';
-        if (years > 0) duration += `${years} year${years > 1 ? 's' : ''}, `;
+        if (years  > 0) duration += `${years}  year${years > 1 ? 's' : ''}, `;
         if (months > 0) duration += `${months} month${months > 1 ? 's' : ''}, `;
         duration += `${days} day${days > 1 ? 's' : ''}`;
         
@@ -193,15 +187,11 @@ const ProfilePage = () => {
                         <h1 className="text-3xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
                             <button
                                 type="button"
-                                onClick={()=>{navi('timeline')}}
+                                onClick={()=>{navigate('timeline')}}
                                 className="inline-flex items-center text-primary-600 hover:text-primary-800 font-medium mr-3"
                                 aria-label="Back"
                             >
                                 <ArrowLeft/>
-                                {/* <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                                </svg> */}
-                                
                             </button>
                             Profile Settings
                         </h1>
@@ -304,6 +294,7 @@ const ProfilePage = () => {
                             <div className="mb-4"
                                 onClick={() => navigate('/connection')}
                             >
+                                {/* TODO: after 2 users are conencted its dhould not show connect to partner, in profile   */}
                                 <a
                                     href="#connection"
                                     className="inline-flex items-center px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-medium transition-colors duration-200"
@@ -312,6 +303,7 @@ const ProfilePage = () => {
                                 </a>
                             </div>
 
+                            {/* TODO: look into profilr->relationship detail */}
                             {/* Relationship Stats */}
                             {profile.relationshipStart && (
                                 <div className="bg-gradient-to-r from-pink-100 to-purple-100 rounded-xl p-4 mb-4">
@@ -419,6 +411,7 @@ const ProfilePage = () => {
                                 </Button>
                                 
                                 <Button
+                                    // TODO: add memory buton not working in profile section
                                     // TODO: add addmemory 
                                     onClick={() => {}}
                                     variant="outline"

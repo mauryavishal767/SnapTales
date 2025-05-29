@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import Header from './Header';
-import MemoryForm from '../memories/MemoryForm';
-import { Modal } from '../ui/Modal';
-import { useAuth } from '../../context/AuthContext';
-import { createUserDocument, getUserDocument } from '../../lib/appwrite';
+import Header                                         from './Header';
+import MemoryForm                                     from '../memories/MemoryForm';
+import        { Modal }                               from '../ui/Modal';
+import        { useAuth }                             from '../../context/AuthContext';
+import React, { useState          , useEffect }       from 'react';
+import        { createUserDocument, getUserDocument } from '../../lib/appwrite';
 
 const Layout = ({ children, onNavigate, showAddMemory, setShowAddMemory }) => {
-    const {user,setUser} = useAuth();
+    const {user       ,setUser}         = useAuth();
     const [userDetails, setUserDetails] = useState(null);
 
     useEffect(() => {
@@ -42,7 +42,7 @@ const Layout = ({ children, onNavigate, showAddMemory, setShowAddMemory }) => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
             <Header 
-                onNavigate={onNavigate}
+            onNavigate={onNavigate}
             />
             
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -52,13 +52,13 @@ const Layout = ({ children, onNavigate, showAddMemory, setShowAddMemory }) => {
             {/* Add Memory Modal */}
             {showAddMemory && (
                 <Modal
-                    isOpen={showAddMemory}
-                    onClose={() => setShowAddMemory(false)}
-                    title="Add New Memory"
+                isOpen={showAddMemory}
+                onClose={() => setShowAddMemory(false)}
+                title="Add New Memory"
                 >
                     <MemoryForm
-                        onMemoryAdded={handleMemoryAdded}
-                        onClose={() => setShowAddMemory(false)}
+                    onMemoryAdded={handleMemoryAdded}
+                    onClose={() => setShowAddMemory(false)}
                     />
                 </Modal>
             )}

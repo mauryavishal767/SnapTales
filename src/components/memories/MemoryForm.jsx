@@ -1,22 +1,22 @@
-import { useEffect, useState } from 'react';
+import { Button }                                    from '../ui/Button';
+import { Input }                                     from '../ui/Input';
+import { useAuth }                                   from '../../context/AuthContext';
+import { useEffect   , useState }                    from 'react';
 import { createMemory, getUserDocument, uploadFile } from '../../lib/appwrite';
-import { Button } from '../ui/Button';
-import { Input } from '../ui/Input';
-import { useAuth } from '../../context/AuthContext';
 
 const MemoryForm = ({ onMemoryAdded, onClose }) => {
-    const { user, setUser } = useAuth();
-    const [form, setForm] = useState({
-        title: '',
-        story: '',
-        memoryDate: '',
-        place: ''
-    });
-    const [userDocs, setUserDocs] = useState({});
-    const [coverImage, setCoverImage] = useState(null);
+    const { user           , setUser }            = useAuth();
+    const [userDocs        , setUserDocs]         = useState({});
+    const [coverImage      , setCoverImage]       = useState(null);
     const [additionalImages, setAdditionalImages] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+    const [loading         , setLoading]          = useState(false);
+    const [error           , setError]            = useState('');
+    const [form            , setForm]             = useState({
+        title     : '',
+        story     : '',
+        memoryDate: '',
+        place     : ''
+    });
 
     useEffect(() => {
         const loadUserDocs = async () => {
@@ -35,7 +35,6 @@ const MemoryForm = ({ onMemoryAdded, onClose }) => {
         loadUserDocs();
     }, [])
     
-
     const handleImageUpload = async (files, isCover = false) => {
         const uploadedFiles = [];
         console.log("uploading files")

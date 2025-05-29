@@ -1,15 +1,16 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState }                   from 'react';
+import { useNavigate }                from 'react-router-dom';
 import { signInUser, getCurrentUser } from '../lib/appwrite';
-import { useAuth } from '../context/AuthContext';
-import { Button } from '../components/ui/Button';
-import { Input } from '../components/ui/Input';
+import { useAuth }                    from '../context/AuthContext';
+import { Button }                     from '../components/ui/Button';
+import { Input }                      from '../components/ui/Input';
 
 const LoginPage = () => {
-    const navigate = useNavigate();
-    const [form, setForm] = useState({ email: '', password: '' });
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+    // TODO: if user is logdein and visit login page redirect to timeline, if this is a issue i dont know
+    const navigate                        = useNavigate();
+    const [form    , setForm]             = useState({ email: '', password: '' });
+    const [loading , setLoading]          = useState(false);
+    const [error   , setError]            = useState('');
     const { setUser, setIsAuthenticated } = useAuth();
 
     const handleSubmit = async (e) => {
@@ -32,9 +33,6 @@ const LoginPage = () => {
                     console.log('user', user);
                     navigate('/timeline');
                 }
-
-                
-                // window.location.hash = 'timeline';
             }
         } catch (error) {
             setError(error.message || 'Login failed. Please try again.');

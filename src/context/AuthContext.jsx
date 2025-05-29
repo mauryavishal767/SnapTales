@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { getCurrentUser, signOutUser } from '../lib/appwrite';
+import { getCurrentUser, signOutUser }                    from '../lib/appwrite';
 
 const AuthContext = createContext();
 
@@ -12,8 +12,8 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [user           , setUser]            = useState(null);
+    const [loading        , setLoading]         = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     const checkAuthUser = async () => {
