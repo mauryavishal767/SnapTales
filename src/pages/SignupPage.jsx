@@ -2,7 +2,7 @@ import { useState }                       from 'react';
 import { useNavigate }                    from 'react-router-dom';
 import { Button }                         from '../components/ui/Button';
 import { Input }                          from '../components/ui/Input';
-import { createUserAccount, signOutUser } from '../lib/appwrite';
+import { createUserAccount, deleteAllSession } from '../lib/appwrite';
 
 const SignupPage = () => {
     const navigate              = useNavigate();
@@ -35,7 +35,7 @@ const SignupPage = () => {
         }
 
         try {
-            const {newAccount} = await createUserAccount(form.email, form.password, form.name);
+            const {newAccount, session} = await createUserAccount(form.email, form.password, form.name);
             if (newAccount) {
                 setSuccess('verification email has been sent.');
             }
@@ -44,7 +44,7 @@ const SignupPage = () => {
         }
 
         try {
-            const sessionOut = await signOutUser();
+            const sessionOut = await deleteAllSession();
         } catch (error) {
             setError(error.message || 'Session Not ended, befor everification refresh the page, and logout');
         } finally {

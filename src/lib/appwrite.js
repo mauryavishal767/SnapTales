@@ -33,6 +33,14 @@ export const createUserAccount = async (email, password, name) => {
     }
 };
 
+export const deleteAllSession = async () =>{
+    try {
+        await account.deleteSessions();
+    } catch (error) {
+        throw error
+    }
+}
+
 export const signInUser = async (email, password) => {
     try {
         const session = await account.createEmailPasswordSession(email, password);

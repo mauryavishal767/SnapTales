@@ -55,6 +55,7 @@ const mockMemories = [
 ];
 
 const Timeline = ({onAddMemory, user, userDetails}) => {
+    // TODO: i dont know some how this happend but other non verified user's timeline was geting memory fethed of other verified user who is coupled with anyone else
     const [memories      , setMemories]       = useState([]);
     const [loading       , setLoading]        = useState(true);
     const [selectedMemory, setSelectedMemory] = useState(null);

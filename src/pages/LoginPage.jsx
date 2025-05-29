@@ -1,12 +1,11 @@
 import { useState }                   from 'react';
 import { useNavigate }                from 'react-router-dom';
-import { signInUser, getCurrentUser } from '../lib/appwrite';
 import { useAuth }                    from '../context/AuthContext';
 import { Button }                     from '../components/ui/Button';
 import { Input }                      from '../components/ui/Input';
+import { signInUser, getCurrentUser, deleteAllSession } from '../lib/appwrite';
 
 const LoginPage = () => {
-    // TODO: if user is logdein and visit login page redirect to timeline, if this is a issue i dont know
     const navigate                        = useNavigate();
     const [form    , setForm]             = useState({ email: '', password: '' });
     const [loading , setLoading]          = useState(false);
@@ -25,6 +24,8 @@ const LoginPage = () => {
                 console.log('inside session', session);
                 const user = await getCurrentUser();
                 if(!user?.emailVerification) {
+                    // TODO: check if nonverified user login and again login and refresh the page able to bypass login
+                    const deleteSession = await deleteAllSession();
                     throw new Error("User not verified! check your email");
                 }
                 else{
