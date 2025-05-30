@@ -34,7 +34,7 @@ export const connectWithPartner = async (currentUserId, partnerUserId) => {
             currentUserId
         );
 
-        if (currentUserDocs.coupleId) {
+        if (currentUserDocs.coupleId && currentUserDocs.coupleId !== currentUserId.substring(0,10)) {
             throw new Error('You are already connected with a partner');
         }
 
@@ -44,26 +44,27 @@ export const connectWithPartner = async (currentUserId, partnerUserId) => {
             partnerUserId
         );
 
-        if (partnerUserDocs.coupleId) {
+        if (partnerUserDocs.coupleId && partnerUserDocs.coupleId !== partnerUserId.substring(0,10)) {
             throw new Error('This user is already connected with someone else');
         }
 
+        const jointId = currentUserId.substring(0,10) + partnerUserId.substring(0,10);
         const couple = await databases.createDocument(
             DATABASE_ID,
             COUPLES_COLLECTION_ID,
-            ID.unique(),
+            jointId,
             {
-                partner1Id   : currentUserDocs.$id,
+                partner1Id   : currentUserDocs.userId,
                 partner1Name : currentUserDocs.name,
                 partner1Email: currentUserDocs.email,
 
-                partner2Id   : partnerUserDocs.$id,
+                partner2Id   : partnerUserDocs.userId,
                 partner2Name : partnerUserDocs.name,
                 partner2Email: partnerUserDocs.email,
 
                 coupleName   : `${currentUserDocs.name} & ${partnerUserDocs.name}`,
                 isActive     : true,
-                connectedBy  : currentUserDocs.$id
+                connectedBy  : currentUserDocs.userId
             },
             [
                 Permission.write(Role.user(currentUserId)),
@@ -97,6 +98,7 @@ export const getCurrentUserCouple = async () => {
         );
 
         if (!userDoc.coupleId) return null;
+        if(! userDoc?.coupleId?.includes(userDoc.userId)) return null
 
         const couple = await databases.getDocument(
             DATABASE_ID,
@@ -107,36 +109,6 @@ export const getCurrentUserCouple = async () => {
         return couple;
     } catch (error) {
         console.error('Error getting current user couple:', error);
-        return null;
-    }
-};
-
-export const getPartnerInfo = async () => {
-    try {
-        const couple = await getCurrentUserCouple();
-        if (!couple) return null;
-
-        const currentUser = await account.get();
-        const isPartner1  = couple.partner1Id === currentUser.$id;
-        const partnerId   = isPartner1 ? couple.partner2Id : couple.partner1Id;
-
-        if (!partnerId) return null;
-
-        const partnerDoc = await databases.getDocument(
-            DATABASE_ID,
-            USERS_COLLECTION_ID,
-            partnerId
-        );
-
-        return {
-            id            : partnerId,
-            name          : isPartner1 ? couple.partner2Name  : couple.partner1Name,
-            email         : isPartner1 ? couple.partner2Email : couple.partner1Email,
-            profilePicture: partnerDoc.profilePicture || null,
-            joinedAt      : partnerDoc.connectedAt
-        };
-    } catch (error) {
-        console.error('Error getting partner info:', error);
         return null;
     }
 };

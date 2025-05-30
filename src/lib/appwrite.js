@@ -71,6 +71,7 @@ export const signOutUser = async () => {
 // Database functions
 export const createUserDocument = async (userId, email, name) => {
     try {
+        const defaultCoupleId = userId.substring(0,10);
         const document = await databases.createDocument(
             DATABASE_ID,
             USERS_COLLECTION_ID,
@@ -79,7 +80,7 @@ export const createUserDocument = async (userId, email, name) => {
                 userId           : userId,
                 email            : email,
                 name             : name,
-                coupleId         : '',
+                coupleId         : defaultCoupleId,
                 partnerId        : '',
                 bio              : '',
                 partnerName      : '',
@@ -160,26 +161,6 @@ export const updateUserDocument = async (userId, data) => {
     }
 };
 
-export const createCouple = async (user1Id, user2Email, coupleName) => {
-    try {
-        const couple = await databases.createDocument(
-            DATABASE_ID,
-            COUPLES_COLLECTION_ID,
-            ID.unique(),
-            {
-                user1Id,
-                user2Email,
-                coupleName,
-                status: 'active', // pending, active
-                createdAt: new Date().toISOString(),
-            }
-        );
-        return couple;
-    } catch (error) {
-        throw error;
-    }
-};
-
 export const createMemory = async (memoryData) => {
     try {
         const memory = await databases.createDocument(
@@ -202,8 +183,10 @@ export const createMemory = async (memoryData) => {
     }
 };
 
-export const getMemories = async (coupleId) => {
+export const getMemories = async (userId, coupleId) => {
     try {
+        // TODO: when user was not connected he made a memory and then connected to someone old memory get lost
+        if(!coupleId?.includes(userId.substring(0,10))) return null
         const memories = await databases.listDocuments(
             DATABASE_ID,
             MEMORIES_COLLECTION_ID,

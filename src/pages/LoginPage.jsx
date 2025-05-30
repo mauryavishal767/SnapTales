@@ -24,7 +24,6 @@ const LoginPage = () => {
                 console.log('inside session', session);
                 const user = await getCurrentUser();
                 if(!user?.emailVerification) {
-                    // TODO: check if nonverified user login and again login and refresh the page able to bypass login
                     const deleteSession = await deleteAllSession();
                     throw new Error("User not verified! check your email");
                 }

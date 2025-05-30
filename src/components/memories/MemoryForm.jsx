@@ -77,7 +77,7 @@ const MemoryForm = ({ onMemoryAdded, onClose }) => {
                 ...form,
                 coverImageId,
                 imageIds,
-                coupleId: userDocs?.coupleId || "", // This should come from user context
+                coupleId: userDocs?.coupleId || '', // This should come from user context
                 createdById: user.$id // This should come from auth context
             };
 

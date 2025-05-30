@@ -55,7 +55,6 @@ const mockMemories = [
 ];
 
 const Timeline = ({onAddMemory, user, userDetails}) => {
-    // TODO: i dont know some how this happend but other non verified user's timeline was geting memory fethed of other verified user who is coupled with anyone else
     const [memories      , setMemories]       = useState([]);
     const [loading       , setLoading]        = useState(true);
     const [selectedMemory, setSelectedMemory] = useState(null);
@@ -64,7 +63,7 @@ const Timeline = ({onAddMemory, user, userDetails}) => {
     useEffect(() => {
         const loadMemory = async ()=>{
             try {
-                const memory = await getMemories(userDetails.coupleId)
+                const memory = await getMemories(user.$id, userDetails.coupleId)
                 console.log("Found memory", memory)
                 setMemories(memory)
             } catch (error) {
@@ -179,7 +178,7 @@ const Timeline = ({onAddMemory, user, userDetails}) => {
                         <p className="text-gray-600">A timeline of our beautiful memories together</p>
                         <div className="flex items-center justify-center mt-4 text-pink-500">
                             <Heart className="w-5 h-5 mr-2 fill-current" />
-                            <span className="font-medium">{memories.length} Precious Memories</span>
+                            <span className="font-medium">{memories?.length || 0} Precious Memories</span>
                         </div>
                     </div>
                 </div>
@@ -187,7 +186,7 @@ const Timeline = ({onAddMemory, user, userDetails}) => {
 
             {/* Timeline */}
             <div className="max-w-lg mx-auto px-6 py-8">
-                {memories.length === 0 ? (
+                {memories?.length === 0 ? (
                 <div className="text-center py-16">
                     <Heart className="w-16 h-16 text-pink-300 mx-auto mb-4" />
                     <h3 className="text-xl font-semibold text-gray-600 mb-2">No memories yet</h3>
@@ -202,7 +201,7 @@ const Timeline = ({onAddMemory, user, userDetails}) => {
                 </div>
                 ) : (
                 <div className="relative">
-                    {memories.map((memory, index) => (
+                    {memories?.map((memory, index) => (
                     <MemoryCard 
                         key={memory.$id}
                         memory={memory} 

@@ -31,7 +31,7 @@ function VerificationPage() {
                 setMessage('Your email has been verified! You can now log in.');
                 // Optionally redirect after a delay
                 alert("verified");
-                setTimeout(() => navigate('/login'), 2000);
+                setTimeout(() => navigate('/login'), 1000);
             }
             catch (err){
             setStatus('error');
@@ -59,7 +59,6 @@ function VerificationPage() {
             {status === 'success' && (
             <div className="text-green-600 text-center">
                 <p>{message}</p>
-                <a href="/#" className="mt-4 inline-block text-blue-600 underline">Go to Login</a>
             </div>
             )}
             {status === 'error' && (
